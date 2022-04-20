@@ -1,0 +1,18 @@
+server:
+  port: 9191
+spring:
+  application:
+    name: PROVIDER-SERVICE
+  zipkin:
+    base-url: http://localhost:9411/
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    preferIpAddress: true
+logging:
+  file: C:\Projects\NAGP 2022\ms-assignment-1\provider\microservce.log
+

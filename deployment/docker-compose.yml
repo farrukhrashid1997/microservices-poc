@@ -1,0 +1,53 @@
+version: "3"
+
+services:
+  service-registry:
+    container_name: service-registry
+    image: farrukhrashid/service-registry:service-registry
+    ports:
+      - "8761:8761"
+    volumes:
+      - /tmp:/workspace/logs
+  cloud-gateway:
+    container_name: cloud-gateway
+    image: farrukhrashid/cloud-gateway:cloud-gateway
+    ports:
+      - "8989:8989"
+    links:
+      - service-registry:service-registry
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://service-registry:8761/eureka
+    volumes:
+      - /tmp:/workspace/logs
+  provider:
+    container_name: provider
+    image: farrukhrashid/provider:provider
+    ports:
+      - "9191:9191"
+    links:
+      - service-registry:service-registry
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://service-registry:8761/eureka
+      SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
+    volumes:
+      - /tmp:/workspace/logs
+  facilities:
+    container_name: facilities
+    image: farrukhrashid/facilities:facilities
+    ports:
+      - "9192:9192"
+    links:
+      - service-registry:service-registry
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://service-registry:8761/eureka
+      SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
+    volumes:
+      - /tmp:/workspace/logs
+
+  zipkin:
+    container_name: zipkin-server
+    image: farrukhrashid/zipkin-server:zipkin-server
+    ports:
+      - "9411:9411"
+    volumes:
+      - /tmp:/workspace/logs
