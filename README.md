@@ -112,4 +112,3 @@ All services share a mounted volume at `/tmp` for logs.
 ## 📃 License
 
 This project is for educational and POC purposes.
-```
